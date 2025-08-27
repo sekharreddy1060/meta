@@ -1,1 +1,41 @@
-
+curl --request POST \
+  --url https://graph.facebook.com/v23.0/705964095941521/messages \
+  --header 'Authorization: Bearer ' \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"messaging_product": "whatsapp",
+	"recipient_type": "individual",
+	"to": "+971521102757",
+	"type": "interactive",
+	"interactive": {
+		"type": "button",
+		"header": {
+			"type": "text",
+			"text": ""
+		},
+		"body": {
+			"text": "Before we get started, please take a moment to read our Terms & Conditions and Data Privacy Notice.\n\n By proceeding, you acknowledge that you have read, understood, and agreed to them, and that you understand your personal data will be processed in the manner set out in the Data Privacy Notice for the purpose of administering and managing your relationship and access to the product or service you have opted for.\n\n ✅ T&Cs: www.emiratesnbd.com/whatsapp \n ✅ Data Privacy Notice:\n https://www.emiratesnbd.com/er/data-privacy-notice/"
+		},
+		"footer": {
+			"text": "To continue, please tap on *Accept*"
+		},
+		"action": {
+			"buttons": [
+				{
+					"type": "reply",
+					"reply": {
+						"id": "change-button",
+						"title": "Accept"
+					}
+				},
+				{
+					"type": "reply",
+					"reply": {
+						"id": "cancel-button",
+						"title": "Reject"
+					}
+				}
+			]
+		}
+	}
+}'
