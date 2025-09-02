@@ -1,0 +1,167 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const app = express();
+const PORT = process.env.PORT || 3000; // Use environment variable for port or default to 3000
+
+// Replace with your actual verify token from WhatsApp Business Platform settings
+const VERIFY_TOKEN = 'apple'; 
+
+// WhatsApp API credentials (replace with your actual values)
+const WHATSAPP_TOKEN = '';
+const PHONE_NUMBER_ID = '764782603384973';
+
+// Middleware to parse JSON request bodies
+app.use(bodyParser.json());
+
+// Webhook verification endpoint (GET request)
+app.get('/webhook', (req, res) => {
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+    console.log('Webhook verified!');
+    res.status(200).send(challenge);
+  } else {
+    console.log('Webhook verified!');
+
+    res.sendStatus(403); // Forbidden
+  }
+});
+
+// Send message via WhatsApp Business API
+async function sendMessage(to, message) {
+  try {
+    const url = `https://graph.facebook.com/v23.0/${PHONE_NUMBER_ID}/messages`;
+    const payload = {
+      messaging_product: 'whatsapp',
+      to,
+      type: 'text',
+      text: { body: message }
+    };
+    const headers = {
+      'Authorization': `Bearer ${WHATSAPP_TOKEN}`,
+      'Content-Type': 'application/json'
+    };
+    const response = await axios.post(url, payload, { headers });
+    console.log('Message sent:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending message:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
+
+async function sendInteractiveButtonMessage(to, payloadText, payloadfooter, payloadbuttons) {
+  const url = `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`;
+  const payload = {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to,
+    type: "interactive",
+    interactive: {
+      type: "button",
+      header: {
+        type: "text",
+        text: ""
+      },
+      body: {
+        text: payloadText
+      },
+      footer: {
+        text: payloadfooter
+      },
+      action: {
+        buttons: payloadbuttons
+      }
+    }
+  };
+  const headers = {
+    'Authorization': `Bearer ${WHATSAPP_TOKEN}`,
+    'Content-Type': 'application/json'
+  };
+  try {
+    const response = await axios.post(url, payload, { headers });
+    console.log('Interactive message sent:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending interactive message:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
+
+// Webhook for receiving messages (POST request)
+app.post('/webhook', (req, res) => {
+  const body = req.body;
+
+  // Check if the event is from a WhatsApp Business Account and contains messages
+  if (body.object === 'whatsapp_business_account' && body.entry) {
+    body.entry.forEach(entry => {
+      entry.changes.forEach(async change => {
+        if (change.field === 'messages' && change.value.messages) {
+          const message = change.value.messages[0]; // Assuming one message per change for simplicity
+
+          console.log(`Received message from ${message.from}: ${message}`);
+          if (message.text && message.text.body.toLowerCase() === 'hi') {
+            await sendMessage(message.from, 'Welcome to EmiratesNBD Whatsapp Banking').catch(console.error);
+            // add delay of 1 second before sending the next message
+            const ecmPayloadText = "Before we get started, please take a moment to read our Terms & Conditions and Data Privacy Notice.\n\n By proceeding, you acknowledge that you have read, understood, and agreed to them, and that you understand your personal data will be processed in the manner set out in the Data Privacy Notice for the purpose of administering and managing your relationship and access to the product or service you have opted for.\n\n ✅ T&Cs: www.emiratesnbd.com/whatsapp \n ✅ Data Privacy Notice:\n https://www.emiratesnbd.com/er/data-privacy-notice/"
+            const ecmPayloadfooter = "To continue, please tap on *Accept*"
+            const ecmButtons = [
+          {
+            type: "reply",
+            reply: {
+              id: "change-button",
+              title: "Accept"
+            }
+          },
+          {
+            type: "reply",
+            reply: {
+              id: "cancel-button",
+              title: "Reject"
+            }
+          }
+        ]
+            await sendInteractiveButtonMessage(message.from, ecmPayloadText, ecmPayloadfooter, ecmButtons).catch(console.error);
+          } else if (message.interactive && message.interactive.type === 'button_reply' && message.interactive.button_reply.id === 'change-button') {
+            const TPINPayloadText = "To proceed with your whatsApp banking registration, please authenticate yourself."
+            const TPINPayloadfooter = ""
+            const TPINButtons = [
+            {
+              type: "reply",
+              reply: {
+                id: "TPIN-button",
+                title: "TPIN"
+              }
+            },
+            {
+              type: "reply",
+              reply: {
+                id: "businessONLINE-button",
+                title: "businessONLINE"
+              }
+            }
+          ]
+            await sendInteractiveButtonMessage(message.from, TPINPayloadText, TPINPayloadfooter, TPINButtons).catch(console.error);
+          } else if (message.interactive && message.interactive.type === 'button_reply' && message.interactive.button_reply.id === 'TPIN-button') {
+            await sendMessage(message.from, 'You have selected TPIN. Pranav is working on public DNS enablement').catch(console.error);
+          } else if (message.interactive && message.interactive.type === 'button_reply' && message.interactive.button_reply.id === 'businessONLINE-button') {
+            await sendMessage(message.from, 'You have selected businessONLINE. Pranav is working on public DNS enablement').catch(console.error);
+          } else {
+            await sendMessage(message.from, "Sorry, I didn't understand that. Please type 'Hi' to start the conversation.").catch(console.error);
+        }
+      }
+      });
+    });
+  }
+  res.sendStatus(200); // Acknowledge receipt of the event
+});
+
+
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
