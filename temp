@@ -75,3 +75,15 @@ EAA5KU7eo1J4BPTv228PmUc58C2pvBhHKsQOdeRMvIfExdg283eR2l09HRxnSSpog6cxkHFdn67gnH9z
         }
     ]
 }
+
+
+
+curl -X POST '{BASE-URL}/{WABA-ID}/flows' \
+--header 'Authorization: Bearer {ACCESS-TOKEN}' \
+--header "Content-Type: application/json" \
+--data '{
+  "name": "My first flow",
+  "categories": [ "OTHER" ],
+  "flow_json" : "{\"version\":\"5.0\",\"screens\":[{\"id\":\"WELCOME_SCREEN\",\"layout\":{\"type\":\"SingleColumnLayout\",\"children\":[{\"type\":\"TextHeading\",\"text\":\"Hello World\"},{\"type\":\"Footer\",\"label\":\"Complete\",\"on-click-action\":{\"name\":\"complete\",\"payload\":{}}}]},\"title\":\"Welcome\",\"terminal\":true,\"success\":true,\"data\":{}}]}",
+  "publish" : true
+}'
