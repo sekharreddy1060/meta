@@ -1,3 +1,77 @@
 764782603384973
 EAA5KU7eo1J4BPTv228PmUc58C2pvBhHKsQOdeRMvIfExdg283eR2l09HRxnSSpog6cxkHFdn67gnH9zSXFoJCu7NDFwHKa1ObKp2bJ9Lc8OZAQ9ElJA6Wzg7NDacc8DF2syJ7G5FeVcKSavZBtWPpKZCmunKyKCuLIhX2wrrmq6SIY9MZAhzX5Mlw29v6caEagZDZD
 1129964562395701
+
+
+
+
+{
+    "version": "7.2",
+    "screens": [
+        {
+            "id": "RFI_A",
+            "title": "Question 1 of 2",
+            "data": {},
+            "layout": {
+                "type": "SingleColumnLayout",
+                "children": [
+                    {
+                        "type": "Form",
+                        "name": "form",
+                        "children": [
+                            {
+                                "type": "TextSubheading",
+                                "text": "How could we do better?"
+                            },
+                            {
+                                "type": "TextArea",
+                                "label": "Leave a comment",
+                                "required": false,
+                                "name": "Leave_a_comment"
+                            },
+                            {
+                                "type": "Footer",
+                                "label": "Continue",
+                                "on-click-action": {
+                                    "name": "navigate",
+                                    "next": {
+                                        "type": "screen",
+                                        "name": "RFI_B"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "RFI_B",
+            "title": "Question 2 of 2",
+            "data": {},
+            "terminal": true,
+            "success": true,
+            "layout": {
+                "type": "SingleColumnLayout",
+                "children": [
+                    {
+                        "type": "Form",
+                        "name": "form",
+                        "children": [
+                            {
+                                "type": "TextSubheading",
+                                "text": "Please provide your Date of Birth as per passport?"
+                            },
+                            {
+                                "type": "TextArea",
+                                "label": "Leave a comment",
+                                "required": false,
+                                "name": "Leave_a_comment"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
