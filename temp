@@ -6,74 +6,65 @@ EAA5KU7eo1J4BPTv228PmUc58C2pvBhHKsQOdeRMvIfExdg283eR2l09HRxnSSpog6cxkHFdn67gnH9z
 
 
 {
-    "version": "7.2",
-    "screens": [
-        {
-            "id": "RFI_A",
-            "title": "Question 1 of 2",
-            "data": {},
-            "layout": {
-                "type": "SingleColumnLayout",
-                "children": [
-                    {
-                        "type": "Form",
-                        "name": "form",
-                        "children": [
-                            {
-                                "type": "TextSubheading",
-                                "text": "How could we do better?"
-                            },
-                            {
-                                "type": "TextArea",
-                                "label": "Leave a comment",
-                                "required": false,
-                                "name": "Leave_a_comment"
-                            },
-                            {
-                                "type": "Footer",
-                                "label": "Continue",
-                                "on-click-action": {
-                                    "name": "navigate",
-                                    "next": {
-                                        "type": "screen",
-                                        "name": "RFI_B"
-                                    }
-                                }
-                            }
-                        ]
-                    }
+  "version": "7.2",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "MAINSCREEN": []
+  },
+  "screens": [
+    {
+      "id": "MAINSCREEN",
+      "terminal": true,
+      "title": "${dynamic_title}",
+      "data": {},
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "flow_path",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "${dynamic_heading}"
+              },
+              {
+                "type": "TextInput",
+                "name": "user_text",
+                "label": "Your Input",
+                "required": true
+              },
+              {
+                "type": "DocumentPicker",
+                "name": "document_picker",
+                "label": "Upload Document",
+                "description": "Supported format: PDF, JPEG, PNG, TIF, MSG",
+                "min-uploaded-documents": 1,
+                "max-uploaded-documents": 1,
+                "max-file-size-kb": 10240,
+                "allowed-mime-types": [
+                  "image/jpeg",
+                  "image/tiff",
+                  "application/pdf"
                 ]
-            }
-        },
-        {
-            "id": "RFI_B",
-            "title": "Question 2 of 2",
-            "data": {},
-            "terminal": true,
-            "success": true,
-            "layout": {
-                "type": "SingleColumnLayout",
-                "children": [
-                    {
-                        "type": "Form",
-                        "name": "form",
-                        "children": [
-                            {
-                                "type": "TextSubheading",
-                                "text": "Please provide your Date of Birth as per passport?"
-                            },
-                            {
-                                "type": "TextArea",
-                                "label": "Leave a comment",
-                                "required": false,
-                                "name": "Leave_a_comment"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    ]
+              },
+              {
+                "type": "Footer",
+                "label": "Submit",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "text": "${form.user_text}",
+                    "documents": "${form.document_picker}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
 
 
