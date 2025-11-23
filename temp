@@ -2,6 +2,33 @@
 EAA5KU7eo1J4BPTv228PmUc58C2pvBhHKsQOdeRMvIfExdg283eR2l09HRxnSSpog6cxkHFdn67gnH9zSXFoJCu7NDFwHKa1ObKp2bJ9Lc8OZAQ9ElJA6Wzg7NDacc8DF2syJ7G5FeVcKSavZBtWPpKZCmunKyKCuLIhX2wrrmq6SIY9MZAhzX5Mlw29v6caEagZDZD
 1129964562395701
 
+{
+  "messaging_product": "whatsapp",
+  "to": "PHONE_NUMBER", 
+  "type": "interactive",
+  "interactive": {
+    "type": "flow",
+    "flow": {
+      "id": "MAINSCREEN",
+      "namespace": "YOUR_FLOW_NAMESPACE",
+      "language": {
+        "code": "en_US"
+      },
+      "parameters": [
+        {
+          "name": "dynamic_title",
+          "type": "text",
+          "text": "Question 1 of 1"
+        },
+        {
+          "name": "dynamic_heading",
+          "type": "text",
+          "text": "Provide the valid Passport or Emirates ID of the cheque book receiver"
+        }
+      ]
+    }
+  }
+}
 
 
 
