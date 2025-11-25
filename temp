@@ -22,9 +22,9 @@
           "type": "string",
           "__example__": "button"
         },
-        "heading_visibile": {
+        "heading_visible": {
           "type": "boolean",
-          "__example__": true
+          "__example__": false
         },
           "type": {
     "type": "string",
@@ -40,15 +40,15 @@
             "children": [
               {
                 "type": "TextHeading",
-                "text": "${data.dynamic_heading}"
+                "text": "${data.dynamic_heading}",
+                "visible":"${data.heading_visibile}"
               },
               {
                 "type": "TextInput",
                 "name": "user_text",
                 "label": "Your Input",
-                "visible":"${data.heading_visibile}",
-                "required": true
-              },
+                "visible":"${data.heading_visibile}"
+                },
               {
                 "type": "DocumentPicker",
                 "name": "document_picker",
