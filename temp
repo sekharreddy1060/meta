@@ -1,14 +1,142 @@
-
-
 {
   "version": "7.2",
   "data_api_version": "3.0",
   "routing_model": {
-    "MAINSCREEN": []
+    "FIRSTSCREEN":  ["SECONDSCREEN", "THIRDSCREEN"]
   },
   "screens": [
     {
-      "id": "MAINSCREEN",
+      "id": "FIRSTSCREEN",
+      "terminal": true,
+      "title": "${data.dynamic_title}",
+      "data": {
+          "dynamic_title": {
+          "type": "string",
+          "__example__": "Question 1 of 100"
+        },
+        "dynamic_heading": {
+          "type": "string",
+          "__example__": "Please ask here"
+        },
+        "dynamic_button": {
+          "type": "string",
+          "__example__": "button"
+        },
+          "type": {
+    "type": "string",
+    "__example__": "corp"
+  }
+        },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "flow_path",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "${data.dynamic_heading}"
+              },
+              {
+                "type": "TextInput",
+                "name": "user_text",
+                "label": "Your Input",
+                "required": true
+              },
+              {
+                "type": "DocumentPicker",
+                "name": "document_picker",
+                "label": "Upload Document",
+                "description": "Supported format: PDF, JPEG, PNG, TIF, MSG",
+                "min-uploaded-documents": 1,
+                "max-uploaded-documents": 1,
+                "max-file-size-kb": 10240,
+                "allowed-mime-types": [
+                  "image/jpeg",
+                  "image/tiff",
+                  "application/pdf"
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "${data.dynamic_button}",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "text": "${form.user_text}",
+                    "documents": "${form.document_picker}",
+                    "type": "CORP"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "SECONDSCREEN",
+      "terminal": true,
+      "title": "${data.dynamic_title}",
+      "data": {
+          "dynamic_title": {
+          "type": "string",
+          "__example__": "Question 1 of 100"
+        },
+        "dynamic_heading": {
+          "type": "string",
+          "__example__": "Please ask here"
+        }
+        },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "flow_path",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "${data.dynamic_heading}"
+              },
+              {
+                "type": "TextInput",
+                "name": "user_text",
+                "label": "Your Input",
+                "required": true
+              },
+              {
+                "type": "DocumentPicker",
+                "name": "document_picker",
+                "label": "Upload Document",
+                "description": "Supported format: PDF, JPEG, PNG, TIF, MSG",
+                "min-uploaded-documents": 1,
+                "max-uploaded-documents": 1,
+                "max-file-size-kb": 10240,
+                "allowed-mime-types": [
+                  "image/jpeg",
+                  "image/tiff",
+                  "application/pdf"
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Submit",
+                "on-click-action": {
+                  "name": "complete",
+                  "payload": {
+                    "text": "${form.user_text}",
+                    "documents": "${form.document_picker}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },{
+      "id": "THIRDSCREEN",
       "terminal": true,
       "title": "${data.dynamic_title}",
       "data": {
