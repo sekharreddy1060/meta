@@ -41,13 +41,13 @@
               {
                 "type": "TextHeading",
                 "text": "${data.dynamic_heading}",
-                "visible":"${data.heading_visibile}"
+                "visible":"${data.heading_visible}"
               },
               {
                 "type": "TextInput",
                 "name": "user_text",
                 "label": "Your Input",
-                "visible":"${data.heading_visibile}"
+                "visible":"${data.heading_visible}"
                 },
               {
                 "type": "DocumentPicker",
