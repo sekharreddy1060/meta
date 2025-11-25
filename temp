@@ -22,6 +22,10 @@
           "type": "string",
           "__example__": "button"
         },
+        "heading_visibile": {
+          "type": "boolean",
+          "__example__": true
+        },
           "type": {
     "type": "string",
     "__example__": "corp"
@@ -42,6 +46,7 @@
                 "type": "TextInput",
                 "name": "user_text",
                 "label": "Your Input",
+                "visible":"${data.heading_visibile}",
                 "required": true
               },
               {
@@ -198,80 +203,3 @@
     }
   ]
 }
-
-
-
-
-{
-  "version": "7.2",
-  "data_api_version": "3.0",
-  "routing_model": {
-    "MAINSCREEN": []
-  },
-  "screens": [
-    {
-      "id": "MAINSCREEN",
-      "terminal": true,
-      "title": "${dynamic_title}",
-      "data": {},
-      "layout": {
-        "type": "SingleColumnLayout",
-        "children": [
-          {
-            "type": "Form",
-            "name": "flow_path",
-            "children": [
-              {
-                "type": "TextHeading",
-                "text": "${dynamic_heading}"
-              },
-              {
-                "type": "TextInput",
-                "name": "user_text",
-                "label": "Your Input",
-                "required": true
-              },
-              {
-                "type": "DocumentPicker",
-                "name": "document_picker",
-                "label": "Upload Document",
-                "description": "Supported format: PDF, JPEG, PNG, TIF, MSG",
-                "min-uploaded-documents": 1,
-                "max-uploaded-documents": 1,
-                "max-file-size-kb": 10240,
-                "allowed-mime-types": [
-                  "image/jpeg",
-                  "image/tiff",
-                  "application/pdf"
-                ]
-              },
-              {
-                "type": "Footer",
-                "label": "Submit",
-                "on-click-action": {
-                  "name": "complete",
-                  "payload": {
-                    "text": "${form.user_text}",
-                    "documents": "${form.document_picker}"
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
-
-
-
-curl -X POST '{BASE-URL}/{WABA-ID}/flows' \
---header 'Authorization: Bearer {ACCESS-TOKEN}' \
---header "Content-Type: application/json" \
---data '{
-  "name": "My first flow",
-  "categories": [ "OTHER" ],
-  "flow_json" : "{\"version\":\"5.0\",\"screens\":[{\"id\":\"WELCOME_SCREEN\",\"layout\":{\"type\":\"SingleColumnLayout\",\"children\":[{\"type\":\"TextHeading\",\"text\":\"Hello World\"},{\"type\":\"Footer\",\"label\":\"Complete\",\"on-click-action\":{\"name\":\"complete\",\"payload\":{}}}]},\"title\":\"Welcome\",\"terminal\":true,\"success\":true,\"data\":{}}]}",
-  "publish" : true
-}'
